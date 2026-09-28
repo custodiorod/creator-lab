@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f1e8"><title>CreatorQI · Análise de carrossel</title><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/carousel.css"><style>.profile-form{display:grid;gap:15px;margin-top:18px}.profile-form label{display:grid;gap:8px;font-size:11px}.profile-form input,.profile-form select{width:100%;min-height:42px;border:1px solid var(--line);background:#f5f1e8;padding:10px 12px;color:var(--ink)}.profile-form .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-result{margin:18px 0 28px;border:1px solid var(--line);background:rgba(250,248,242,.95);padding:20px}.profile-result>header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}.profile-result>header h3{font:500 19px/1.4 'Space Grotesk',var(--sans);max-width:800px;margin:9px 0}.profile-result>header small,.cost-note{font:9px/1.7 var(--mono);color:var(--muted)}.profile-result .result-summary{margin-top:12px}@media(max-width:650px){.profile-form .form-row{grid-template-columns:1fr}.profile-result{padding:13px}.profile-result>header{display:block}.cost-note{display:block;margin-top:8px}}.embedded-carousel>.topbar{display:none}</style></head>
+<body class="carousel-page">
+<header class="topbar"><a class="brand" href="/" aria-label="Voltar ao CreatorQI"><svg class="brand-brain" viewBox="0 0 300 230" fill="none" aria-hidden="true"><g fill="#7603eb" transform="translate(8 8)"><path d="M37 4h105v22h24v119h-23v24h-38v35H74v-20H39v-21H16V43h21z"/><path d="M201 4h67v24h-13v145h13v24h-67v-24h13V28h-13z"/></g><path fill="#fe025d" d="M37 4h105v22h24v119h-23v24h-38v35H74v-20H39v-21H16V43h21z"/><path fill="#fe025d" d="M201 4h67v24h-13v145h13v24h-67v-24h13V28h-13z"/><path d="M55 47h78v78H90v14H70v-17H55z" stroke="#f5f1e8" stroke-width="8" stroke-linejoin="miter"/><path d="M59 65h15V53h17v15h16V53h15v18h-17v15h17v19h-19V91H88v18H73V91H59zM90 125v-16h17v-9h15" stroke="#f5f1e8" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></svg> CreatorQI<span class="edition">ANÁLISE VISUAL / 02</span></a><div class="top-actions"><div class="format-filter"><label for="format-filter">FORMATO</label><select id="format-filter" aria-label="Filtrar formato da análise"><option value="reels">Só Reels</option><option value="carousel">Só carrossel</option><option value="both">Reels + carrossel</option></select></div><a class="quiet" href="/?format=reels">← Biblioteca de Reels</a><span id="carousel-connection" class="connection">Verificando OpenRouter</span></div></header>
+<main class="carousel-main"><section class="carousel-intro"><div><div class="eyebrow"><span class="status-dot"></span>LEITURA VISUAL + CLASSIFICAÇÃO JEV</div><h1>O que cada slide<br><span>está construindo?</span></h1><p>Informe um perfil público. A Apify busca as publicações e o CreatorQI filtra os carrosséis para analisar cada sequência automaticamente.</p></div><div class="pipeline-note"><b>MODELO VISUAL</b><span id="vision-model">Gemini 3.1 Flash-Lite · via OpenRouter</span><b>CLASSIFICAÇÃO</b><span>TypeSafe Jev · via OpenRouter</span></div></section>
+<div id="format-note" class="format-note" hidden>Modo combinado: esta página coleta e analisa os carrosséis públicos do perfil. Os Reels são processados na biblioteca. <a href="/?format=both">Voltar à biblioteca ↗</a></div>
+<section class="carousel-workbench"><div class="upload-column"><div class="section-top"><div><span class="eyebrow">01 / PERFIL</span><h2>Informe o @.</h2></div></div>
+<form id="profile-form" class="profile-form"><label>Perfil público do Instagram<input name="creator" required placeholder="ex.: hormozi" pattern="@?[a-zA-Z0-9_.]{1,30}" autocomplete="off"></label><div class="form-row"><label>Publicações recentes<select name="limit"><option value="3">3 · teste inicial</option><option value="6" selected>6</option><option value="12">12 · máximo da coleta</option></select></label><label>Limite de gastos na Apify (US$)<input name="budget" type="number" min="0.05" max="30" value="1" step="0.05"></label></div><div id="file-message" class="file-message" role="status"></div><button id="analyze" class="primary analyze-button" type="submit">Buscar carrosséis e analisar <span>↗</span></button></form><p class="privacy-note">A Apify busca publicações públicas recentes e separa os carrosséis. O CreatorQI envia as imagens encontradas ao OpenRouter para leitura visual e classificação Jev. Cada publicação pode gerar cobrança nos provedores.</p></div>
+<aside class="method-column"><span class="eyebrow">O CREATORQI FAZ O RESTO</span><ol><li><b>Busca</b><span>A Apify consulta as publicações recentes do perfil público.</span></li><li><b>Filtra</b><span>O CreatorQI mantém apenas publicações em formato carrossel.</span></li><li><b>Analisa</b><span>O modelo visual lê os slides e o Jev classifica gancho, sequência, visual e CTA.</span></li></ol><div class="method-callout"><b>SEM UPLOAD MANUAL</b><p>Conecte Apify e OpenRouter em Conexões. O @ do perfil é a única informação necessária para começar.</p><a href="/?format=reels">Voltar para os Reels ↗</a></div></aside></section>
+<section id="result" class="carousel-result" hidden><div class="result-header"><div><span class="eyebrow">02 / LEITURA DO JEV</span><h2>Carrosséis encontrados.</h2></div><div class="result-actions"><span id="result-summary"></span><button id="download-report" class="quiet">Baixar análises ↓</button></div></div><div id="profile-results" class="profile-results"></div><p class="result-caveat">As análises descrevem somente o conteúdo visível nas imagens. Não preveem alcance nem comprovam desempenho.</p></section>
+<footer>CREATORQI / PESQUISA VISUAL <span>Apify busca os posts; OpenRouter e Jev analisam os carrosséis.</span></footer></main><div id="toast" role="status" hidden></div><script>
+(()=>{
+  const select=document.querySelector('#format-filter');
+  if(!select)return;
+  const valid=new Set(['reels','carousel','both']);
+  const onCarousel=Boolean(window.frameElement)||['/carousel','/slides'].includes(location.pathname);
+  if(window.frameElement)document.body.classList.add('embedded-carousel');
+  const params=new URLSearchParams(location.search);
+  let mode=params.get('format');
+  if(!valid.has(mode)){try{mode=localStorage.getItem('creatorqi.format')}catch{}}
+  if(!valid.has(mode))mode=onCarousel?'carousel':'reels';
+  const destination=(path,value)=>{const url=new URL(location.href);url.pathname=path;url.searchParams.set('format',value);return url.pathname+url.search+url.hash};
+  select.value=mode;
+  const note=document.querySelector('#format-note');
+  if(note)note.hidden=mode!=='both';
+  if(mode==='carousel'&&!onCarousel){location.replace(destination('/slides','carousel'));return}
+  if(mode==='reels'&&onCarousel){location.replace(destination('/','reels'));return}
+  select.addEventListener('change',()=>{
+    mode=select.value;
+    try{localStorage.setItem('creatorqi.format',mode)}catch{}
+    if(window.frameElement&&mode!=='carousel'){window.top.location.assign(destination('/',mode));return}
+    if(mode==='carousel'&&!onCarousel){location.assign(destination('/carousel','carousel'));return}
+    if(mode==='reels'&&onCarousel){location.assign(destination('/','reels'));return}
+    if(note)note.hidden=mode!=='both';
+    const url=new URL(location.href);url.searchParams.set('format',mode);history.replaceState(null,'',url.pathname+url.search+url.hash);
+  });
+})();
+</script><script type="module" src="/carousel.js"></script></body></html>

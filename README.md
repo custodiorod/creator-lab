@@ -1,92 +1,91 @@
-# Creator Lab
+# CreatorQI (Creator Lab)
 
-[![Watch Creator Lab classify Reel scripts and reveal hook patterns](docs/assets/creator-lab-demo.gif)](https://novitckii.com/lib/creator-lab/jev-demo.mp4)
+Adaptação em português do [Creator Lab de Artem Novitckii](https://github.com/artemnovitckii/creator-lab), distribuída sob a licença MIT original. Esta edição usa Jev via OpenRouter e acrescenta uma área experimental de análise de carrosséis por perfil.
 
-**[Watch the full-quality demo](https://novitckii.com/lib/creator-lab/jev-demo.mp4)** · [Download MP4](docs/assets/creator-lab-demo.mp4) · Saved analysis replay
+Transforme os Reels do Instagram de um criador em uma biblioteca de pesquisa. Filtre por tema e gancho, compare o engajamento, leia os roteiros e abra as publicações originais por trás de cada padrão.
 
-Turn a creator's Instagram Reels into a searchable research library. Filter by topic and hook, compare engagement, read the scripts, and open the original posts behind each pattern.
+Feito com **Apify → transcrição pelo Groq → TypeSafe Jev via OpenRouter**. A área experimental de carrosséis usa um modelo visual do OpenRouter para ler slides e o Jev para classificar o relatório. Fireworks é uma alternativa opcional para transcrição. O sistema roda localmente no navegador. Use suas próprias chaves de API e escolha um perfil público, inclusive o seu.
 
-Built with **Apify → Fireworks or Groq → TypeSafe Jev**. Runs locally in your browser. Bring your own API keys and choose a public creator, including your own account.
+## Comece por aqui
 
-## Start here
+O [guia rápido](docs/GUIA-RAPIDO.md) mostra o caminho mais curto. O **[guia completo de configuração](docs/SETUP.md)** explica as ferramentas, chaves, primeira análise e solução de problemas.
 
-**[Full setup guide](docs/SETUP.md)** covers installing the tools, getting keys, choosing a transcription provider, your first analysis, and troubleshooting.
-
-1. Install [Node.js](https://nodejs.org/en/download) (24 recommended; minimum 22.9) and [FFmpeg](https://ffmpeg.org/download.html). Both `ffmpeg` and `ffprobe` must be on PATH.
-2. Download this repository using **Code → Download ZIP**, unzip it, and open a terminal in that folder. Or clone it:
+1. Instale [Node.js](https://nodejs.org/en/download) (24 recomendado; mínimo 22.9) e [FFmpeg](https://ffmpeg.org/download.html). `ffmpeg` e `ffprobe` precisam estar no PATH.
+2. Baixe este repositório usando **Code → Download ZIP**, extraia o arquivo e abra um terminal nessa pasta. Ou clone o repositório:
 
    ```sh
-   git clone https://github.com/artemnovitckii/creator-lab.git
+   git clone https://github.com/custodiorod/creator-lab.git
    cd creator-lab
    ```
 
-3. Create your local configuration:
+3. Crie sua configuração local:
 
    ```sh
    npm run setup
    ```
 
-4. Open `.env` in your editor. Add `APIFY_TOKEN`, `TYPESAFE_API_KEY`, and **one** transcription key: `FIREWORKS_API_KEY` or `GROQ_API_KEY`. Set `TRANSCRIPTION_PROVIDER` to match.
-5. Check and launch:
+4. Abra `.env` no editor e adicione `APIFY_TOKEN`, `OPENROUTER_API_KEY` e `GROQ_API_KEY`. Groq é o transcritor padrão; Fireworks é uma alternativa opcional.
+5. Verifique e inicie:
 
    ```sh
    npm run doctor
    npm start
    ```
 
-6. Open **http://127.0.0.1:5190**, verify **Connections**, then choose **New analysis**. Enter a username without `@`. Start with a 20-Reel pilot.
+6. Abra **http://127.0.0.1:5190**, confira **Conexões** e escolha **Nova análise**. Digite o nome de usuário sem `@`. Comece com um teste de 20 Reels.
 
-No npm dependencies or build step are needed. You can open the synthetic motion rehearsal without keys; real collection and analysis use paid provider APIs.
+Não é necessário instalar dependências npm nem compilar o projeto. O ensaio visual com dados sintéticos funciona sem chaves; a coleta e análise reais usam APIs pagas dos provedores.
 
-## What you get
+## O que você recebe
 
-- Eight transcript classifications: topic, opening move, hook mechanism, script structure, evidence, emotional appeal, advice specificity, and spoken CTA.
-- Script passages labeled as hook, setup, problem, example, advice, payoff, CTA, or other, with source text and available timestamps.
-- Combined topic and hook filters, engagement comparisons with sample sizes, and original-Reel links.
-- A synchronized thumbnail wall and performance map, with saved-result replay for screen recording.
-- Pausing, resuming, transcript reuse, classification caching, and JSON exports.
+- Oito classificações da transcrição: tema, tipo de abertura, mecanismo do gancho, estrutura do roteiro, evidências, apelo emocional, especificidade do conselho e chamada para ação falada.
+- Trechos do roteiro identificados como gancho, contexto, problema, exemplo, orientação, conclusão, chamada para ação ou outro, com o texto original e marcações de tempo disponíveis.
+- Filtros combinados por tema e gancho, comparações de engajamento com tamanho das amostras e links para os Reels originais.
+- Mural sincronizado de miniaturas e mapa de desempenho, com reprodução dos resultados salvos para gravação de tela.
+- Pausa e retomada, reutilização de transcrições, cache de classificações e exportação em JSON.
+- Área experimental para pesquisar carrosséis de um perfil público e inspecionar a análise visual dos slides. Valide resultados e custos em um lote pequeno antes de usar em produção.
 
-Jev sees the speech before performance metrics are joined. Views and plays remain separate. Unknown metrics stay unknown. Engagement comparisons describe the selected sample; they do not prove what caused a Reel to perform.
+O Jev analisa a fala antes de associar as métricas de desempenho. Visualizações e reproduções permanecem separadas. Métricas desconhecidas continuam identificadas como desconhecidas. As comparações descrevem a amostra selecionada; não provam o que causou o desempenho de um Reel.
 
-## Providers
+## Provedores
 
-| Stage | Provider | Configuration |
+| Etapa | Provedor | Configuração |
 | --- | --- | --- |
-| Collect Reel metadata and media URLs | [Apify Instagram Reel Scraper](https://apify.com/apify/instagram-reel-scraper) | `APIFY_TOKEN` |
-| Transcribe, default option | [Fireworks](https://fireworks.ai/) | `TRANSCRIPTION_PROVIDER=fireworks`, `FIREWORKS_API_KEY` |
-| Transcribe, alternative | [Groq](https://console.groq.com/docs/speech-to-text) | `TRANSCRIPTION_PROVIDER=groq`, `GROQ_API_KEY` |
-| Classify scripts | [TypeSafe Jev](https://docs.typesafe.ai/api) | `TYPESAFE_API_KEY` |
+| Coletar dados e endereços de mídia dos Reels | [Apify Instagram Reel Scraper](https://apify.com/apify/instagram-reel-scraper) | `APIFY_TOKEN` |
+| Transcrever, opção padrão | [Groq](https://console.groq.com/docs/speech-to-text) | `TRANSCRIPTION_PROVIDER=groq`, `GROQ_API_KEY` |
+| Transcrever, alternativa opcional | [Fireworks](https://fireworks.ai/) | `TRANSCRIPTION_PROVIDER=fireworks`, `FIREWORKS_API_KEY` |
+| Classificar roteiros | [TypeSafe Jev via OpenRouter](https://openrouter.ai/typesafe/jev-1.13) | `OPENROUTER_API_KEY` |
 
-Use either transcription provider. There is no automatic switch that could charge a different provider. Restart the server after changing `.env`.
+Use apenas um dos provedores de transcrição. Não há troca automática que possa gerar cobrança em outro provedor. Reinicie o servidor após alterar `.env`.
 
-## Costs and coverage
+## Custos e cobertura
 
-You pay the providers directly. The Apify spending cap in the form covers **Apify only**, not Jev or transcription. Start small and check provider billing before increasing the batch. Displayed model costs are estimates using rates in the source, not a billing guarantee.
+Você paga diretamente aos provedores. O limite de gastos da Apify no formulário cobre **somente a Apify**, não o Jev nem a transcrição. Comece com poucos itens e confira a cobrança dos provedores antes de aumentar o lote. Os custos exibidos são estimativas baseadas nas tarifas configuradas, não uma garantia de cobrança.
 
-Each run requests 1 to 1,000 Reels from one handle. Actual coverage depends on Instagram and Apify. The scraper skips pinned and trial Reels; this is not a guaranteed full-account archive. Private, deleted, expired, or inaccessible media may fail. Music-only and very short speech are excluded from script analysis.
+Cada execução solicita de 1 a 1.000 Reels de um perfil. A cobertura real depende do Instagram e da Apify. O coletor ignora Reels fixados e de teste; portanto, não garante um arquivo completo da conta. Mídias privadas, apagadas, expiradas ou inacessíveis podem falhar. Vídeos só com música ou fala muito curta ficam fora da análise de roteiro.
 
-Replay animates saved results. It does not run collection or inference again, and its playback speed is not the pipeline's processing speed.
+A reprodução anima resultados salvos. Ela não faz uma nova coleta nem uma nova análise, e sua velocidade não representa o tempo de processamento do sistema.
 
-## Privacy
+## Privacidade
 
-The server binds to `127.0.0.1`. Keys stay in your local `.env` or server memory and are used to authenticate requests to their providers. Apify receives the handle; your chosen speech provider receives audio; Jev receives transcript text. Original source media is fetched from supported CDN hosts. The dashboard also loads fonts from Google Fonts. [Full data flow](docs/PRIVACY.md).
+O servidor fica disponível em `127.0.0.1`. As chaves ficam no `.env` local (inclusive quando salvas pela janela Conexões) e autenticam as solicitações aos provedores. A Apify recebe o perfil; o provedor de fala escolhido recebe o áudio; o OpenRouter encaminha a classificação ao Jev. A mídia original é obtida de endereços CDN compatíveis. O painel também carrega fontes do Google Fonts. [Veja o fluxo completo dos dados](docs/PRIVACY.md).
 
-`.env`, generated data, caches, and downloaded media are excluded from Git. This repository includes no personal API keys or collected creator archive. Never put keys into a GitHub issue or share your `.env`.
+`.env`, dados gerados, caches e mídias baixadas ficam fora do Git. Este repositório não inclui chaves pessoais nem arquivos coletados de criadores. Nunca publique suas chaves em uma issue do GitHub nem compartilhe o arquivo `.env`.
 
-## Development
+## Desenvolvimento
 
 ```sh
 npm run check
 npm test
 ```
 
-Tests use mocked provider responses and local FFmpeg fixtures; they do not make paid API calls. Provider key verification checks account access, not a successful end-to-end analysis. A small live pilot is the final setup check.
+Os testes usam respostas simuladas dos provedores e arquivos locais para o FFmpeg; não fazem chamadas pagas. A verificação das chaves confirma o acesso à conta, mas não uma análise completa bem-sucedida. Um pequeno teste real é a etapa final de configuração.
 
-- `server.mjs`: local HTTP server, API, credentials in memory.
-- `lib/providers.mjs`: provider calls and media extraction.
-- `lib/pipeline.mjs`: processing, persistence, retries, and cache.
-- `lib/schema.mjs`: Jev classification definitions.
-- `public/`: research dashboard and recording views.
-- `data/`: generated automatically, local only.
+- `server.mjs`: servidor HTTP local, API e configuração das conexões.
+- `lib/providers.mjs`: chamadas aos provedores e extração de mídia.
+- `lib/pipeline.mjs`: processamento, persistência, novas tentativas e cache.
+- `lib/schema.mjs`: definições das classificações do Jev.
+- `public/`: painel de pesquisa e telas de gravação.
+- `data/`: gerado automaticamente e mantido localmente.
 
-MIT licensed. This is an independent project, not an official Instagram, Apify, Fireworks, Groq, or TypeSafe product.
+Licenciado sob MIT, preservando o copyright de Artem Novitckii no [LICENSE](LICENSE). As adaptações desta edição estão neste fork. Este é um projeto independente e não é um produto oficial do Instagram, Apify, Fireworks, Groq, OpenRouter ou TypeSafe.

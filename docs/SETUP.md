@@ -1,12 +1,12 @@
-# Set up your own creator research dashboard
+# Configure seu próprio painel de pesquisa de criadores
 
-You need a computer, Node.js, FFmpeg, and three API keys: Apify, TypeSafe Jev, and either Fireworks or Groq. You do not need both speech providers. No Instagram password is requested.
+Você precisa de um computador, Node.js, FFmpeg e três chaves de API: Apify, OpenRouter (para o TypeSafe Jev) e Groq (para transcrição). Fireworks é uma alternativa opcional de transcrição. Não é solicitada a senha do Instagram.
 
-## 1. Install the tools
+## 1. Instale as ferramentas
 
-Install Node.js 24 from [nodejs.org](https://nodejs.org/en/download). Node 22.9 or newer also works. Open a new terminal after installing it.
+Instale o Node.js 24 em [nodejs.org](https://nodejs.org/en/download). A versão 22.9 ou mais recente também funciona. Abra um novo terminal após a instalação.
 
-Install FFmpeg using the option for your computer:
+Instale o FFmpeg usando a opção para o seu computador:
 
 **macOS with Homebrew**
 
@@ -14,7 +14,7 @@ Install FFmpeg using the option for your computer:
 brew install ffmpeg
 ```
 
-If you do not have Homebrew, use the macOS build links on [FFmpeg's download page](https://ffmpeg.org/download.html), or install Homebrew from its official site first.
+Se você não tiver o Homebrew, use os links de compilação do macOS em [página de download do FFmpeg](https://ffmpeg.org/download.html), ou instale primeiro o Homebrew pelo site oficial.
 
 **Windows with WinGet, in PowerShell**
 
@@ -22,7 +22,7 @@ If you do not have Homebrew, use the macOS build links on [FFmpeg's download pag
 winget install --id Gyan.FFmpeg --exact
 ```
 
-Close and reopen PowerShell after installation. If WinGet is unavailable, use the Windows build links on FFmpeg's download page and add its `bin` folder to PATH.
+Feche e abra o PowerShell novamente após a instalação. Se o WinGet não estiver disponível, use os links de compilação do Windows na página de download do FFmpeg e adicione a pasta `bin` ao PATH.
 
 **Ubuntu / Debian**
 
@@ -40,142 +40,143 @@ ffmpeg -version
 ffprobe -version
 ```
 
-## 2. Download Creator Lab
+## 2. Baixe o CreatorQI
 
-On the [repository page](https://github.com/artemnovitckii/creator-lab), click **Code → Download ZIP**, then extract the ZIP. Open a terminal inside the extracted folder, where `package.json` is located.
+Na [página deste fork](https://github.com/custodiorod/creator-lab), clique em **Code → Download ZIP** e extraia o arquivo. Abra um terminal dentro da pasta extraída, onde está o `package.json`.
 
-If you use Git:
+Se você usa Git:
 
 ```sh
-git clone https://github.com/artemnovitckii/creator-lab.git
+git clone https://github.com/custodiorod/creator-lab.git
 cd creator-lab
 ```
 
-Run:
+Execute:
 
 ```sh
 npm run setup
 ```
 
-This copies `.env.example` to `.env`. It never overwrites an existing `.env`. Open `.env` with a text editor. Dotfiles may be hidden in Finder; an editor such as VS Code can open the folder and show them.
+Isso copia `.env.example` para `.env` sem substituir um arquivo existente. Abra `.env` em um editor de texto. Arquivos iniciados por ponto podem ficar ocultos no Finder; um editor como o VS Code consegue exibi-los.
 
-## 3. Get your keys
+## 3. Obtenha suas chaves
 
-| Key | Where to get it | What it does |
+| Chave | Onde obter | Para que serve |
 | --- | --- | --- |
-| Apify | [Apify Console](https://console.apify.com/), account settings / API integrations | Collects Reel URLs, thumbnails and public metrics |
-| Jev | [TypeSafe](https://typesafe.ai/), your account's API key settings; [API documentation](https://docs.typesafe.ai/api) | Labels transcripts and script passages |
-| Fireworks, one option | [Fireworks account](https://app.fireworks.ai/), API keys | Transcribes audio with Whisper V3 Turbo |
-| Groq, alternative | [Groq API keys](https://console.groq.com/keys) | Transcribes audio with Whisper Large V3 Turbo |
+| Apify | [Apify Console](https://console.apify.com/), configurações da conta / integrações de API | Coleta endereços dos Reels, miniaturas e métricas públicas |
+| Jev | [OpenRouter](https://openrouter.ai/settings/keys), crie uma chave de API; [Jev model](https://openrouter.ai/typesafe/jev-1.13) | Classifica transcrições e trechos do roteiro |
+| Groq, padrão | [Groq chaves de API](https://console.groq.com/keys) | Transcreve o áudio com Whisper Large V3 Turbo |
+| Fireworks, alternativa opcional | [Conta Fireworks](https://app.fireworks.ai/), chaves de API | Transcreve o áudio com Whisper V3 Turbo |
 
-Enable the necessary API access and billing in each account. Available plans, credits, quotas, and upgrade availability can change. You are billed by these services, not Creator Lab. The app uses Apify's [Instagram Reel Scraper](https://apify.com/apify/instagram-reel-scraper), Actor ID `xMc5Ga1oCONPmWJIa`.
+Ative o acesso à API e a cobrança necessária em cada conta. Planos, créditos, cotas e opções de upgrade podem mudar. A cobrança é feita por esses serviços, não pelo CreatorQI. O aplicativo usa o [Instagram Reel Scraper](https://apify.com/apify/instagram-reel-scraper), Actor ID `xMc5Ga1oCONPmWJIa`.
 
-## 4. Configure one transcription provider
+## 4. Configure um provedor de transcrição
 
-For **Fireworks**, fill these entries in `.env`:
-
-```dotenv
-APIFY_TOKEN=your_apify_token
-TYPESAFE_API_KEY=your_typesafe_key
-TRANSCRIPTION_PROVIDER=fireworks
-FIREWORKS_API_KEY=your_fireworks_key
-PORT=5190
-```
-
-For **Groq**, use:
+Para usar a transcrição padrão do **Groq**, preencha estas entradas em `.env`:
 
 ```dotenv
 APIFY_TOKEN=your_apify_token
-TYPESAFE_API_KEY=your_typesafe_key
+OPENROUTER_API_KEY=your_openrouter_key
 TRANSCRIPTION_PROVIDER=groq
 GROQ_API_KEY=your_groq_key
 PORT=5190
 ```
 
-Replace the example values with your own keys. Keep just one value per setting. Leave the unused speech provider key empty. You do not need to edit any JavaScript.
+Para usar o **Fireworks**, substitua pelas configurações abaixo:
 
-The default local pacing settings are `FIREWORKS_REQUESTS_PER_MINUTE=60` and `GROQ_REQUESTS_PER_MINUTE=20`. These are local ceilings, not a statement of your account quota. Lower them if your account has a lower limit. Audio-duration quotas can also apply.
+```dotenv
+APIFY_TOKEN=your_apify_token
+OPENROUTER_API_KEY=your_openrouter_key
+TRANSCRIPTION_PROVIDER=fireworks
+FIREWORKS_API_KEY=your_fireworks_key
+PORT=5190
+```
 
-Keys can alternatively be supplied through environment variables or the app's **Connections** dialog. Dialog keys last until the server stops. `.env` keys persist locally. This distribution does not read a parent folder's `.env`.
+Substitua os valores de exemplo pelas suas chaves. Use apenas um valor por configuração. Deixe vazia a chave do provedor de fala que não será usado. Não é necessário editar o JavaScript.
 
-## 5. Launch and verify
+Os limites locais padrão de solicitações por minuto são `FIREWORKS_REQUESTS_PER_MINUTE=60` and `GROQ_REQUESTS_PER_MINUTE=20`. Eles são limites locais, não representam a cota da sua conta. Reduza-os se sua conta tiver um limite menor. Também podem existir cotas de duração de áudio.
+
+As chaves também podem ser informadas por variáveis de ambiente ou na janela **Conexões**. Ao salvar pela janela, as chaves são gravadas no `.env` desta pasta e permanecem após reiniciar o servidor. Não compartilhe esse arquivo. Esta versão não lê o `.env` de uma pasta acima.
+
+## 5. Inicie e verifique
 
 ```sh
 npm run doctor
 npm start
 ```
 
-Doctor checks installed tools and key presence without printing keys or calling provider APIs. Open **http://127.0.0.1:5190** in your browser. Keep the terminal open while processing.
+O diagnóstico verifica as ferramentas instaladas e a presença das chaves, sem exibi-las nem chamar as APIs dos provedores. Abra **http://127.0.0.1:5190** no navegador. Mantenha o terminal aberto durante o processamento.
 
-Open **Connections** and use **Save & verify connections**. Only Apify, Jev, and the selected speech provider are needed. A missing unused speech key is fine. Verification confirms API access; your first audio request still needs to succeed.
+Abra **Conexões** e use **Salvar e verificar conexões**. Você precisa apenas de Apify, Jev e do provedor de fala escolhido. A ausência da chave de um provedor de fala não utilizado não é um problema. A verificação confirma o acesso à API; ainda será necessário concluir a primeira solicitação de áudio.
 
-To stop the server, press **Ctrl+C** in its terminal. After editing `.env`, stop and start it again.
+Para parar o servidor, pressione **Ctrl+C** no terminal. Depois de editar `.env`, pare e inicie o servidor novamente.
 
-## 6. Run a small pilot
+## 6. Faça um teste pequeno
 
-1. Choose **New analysis**.
-2. Enter the creator's username without `@` or a profile URL. Use your own account or another public creator.
-3. Start with **20 Reels**, concurrency **2**, and a small Apify cap such as **$1**. This cap may stop collection before the requested count, and only covers Apify charges.
-4. Optionally provide a two-letter speech language code such as `en`; otherwise leave it blank.
-5. Start the run. Watch Run activity for collection, transcription, and classification.
-6. Inspect a few transcripts and original Reels before collecting a larger batch.
+1. Escolha **Nova análise**.
+2. Digite o nome de usuário sem `@` ou cole o endereço do perfil. Use sua conta ou outro perfil público.
+3. Comece com **20 Reels**, concorrência **2** e um limite baixo da Apify, como **US$ 1**. A coleta pode parar antes da quantidade solicitada; esse limite cobre apenas as cobranças da Apify.
+4. Se quiser, informe um código de idioma de duas letras, como `pt`; caso contrário, deixe o campo vazio.
+5. Inicie a análise. Acompanhe a coleta, a transcrição e a classificação em Atividade da análise.
+6. Confira algumas transcrições e os Reels originais antes de coletar um lote maior.
 
-The pipeline downloads media, extracts 16 kHz mono audio with FFmpeg, sends it to your chosen transcription service, and asks Jev to label the resulting speech. Each stage takes real time. The animated replay runs only after results exist.
+O fluxo baixa a mídia, extrai o áudio mono de 16 kHz com FFmpeg, envia-o ao serviço de transcrição escolhido e pede ao Jev que classifique a fala. Cada etapa leva tempo. A reprodução animada só funciona quando os resultados já existem.
 
-A run supports up to 1,000 requested Reels. Instagram availability and the scraper determine what is actually returned. Pinned and trial Reels are skipped. This is not a guarantee of analyzing every Reel on any account.
+Uma análise aceita até 1.000 Reels solicitados. A disponibilidade do Instagram e o coletor determinam o que será retornado. Reels fixados e de teste são ignorados. Isso não garante a análise de todos os Reels de uma conta.
 
-## 7. Use the findings for your next post
+## 7. Use os resultados na sua próxima publicação
 
-Choose a **Topic**, then a **Hook**. The wall, graph and examples narrow together. Select **Compare engagement** to compare patterns using median plays or views, likes per 1,000, and comments per 1,000. Check the sample sizes and keep post age and length comparable.
+Escolha um **Tema** e depois um **Gancho**. O mural, o gráfico e os exemplos serão filtrados juntos. Selecione **Comparar engajamento** para comparar padrões por mediana de reproduções ou visualizações, curtidas por mil e comentários por mil. Confira o tamanho das amostras e compare publicações de idade e duração semelhantes.
 
-Open **Read script** or click a thumbnail to inspect its opening, script roles, and transcript. Use **Original Reel** to check how it was delivered. Save an opening structure you can adapt to your own topic and experience. Engagement is a clue to investigate, not proof that copying a hook will reproduce the result.
+Abra **Ler roteiro** ou clique em uma miniatura para ver a abertura, as partes do roteiro e a transcrição. Use **Reel original** para conferir como o conteúdo foi apresentado. Guarde uma estrutura de abertura que possa adaptar ao seu tema e à sua experiência. Engajamento é uma pista para investigar, não uma prova de que copiar um gancho repetirá o resultado.
 
-You can repeat this for your own account to find topics worth revisiting. Each new analysis takes a separate handle; the app does not combine multiple creators into one run.
+Você pode repetir o processo na sua conta para encontrar temas que valem ser retomados. Cada análise usa um perfil separado; o aplicativo não combina vários criadores em uma única execução.
 
-Use **Replay analysis** for a saved-result animation. Filtering and replay do not trigger new paid analyses. Export JSON when you want a local backup; exports contain creator content and source URLs, so review them before sharing.
+Use **Reproduzir análise** para animar os resultados salvos. Filtrar e reproduzir não inicia novas análises pagas. Exporte um JSON para criar um backup local; os arquivos contêm conteúdo do criador e endereços de origem, então confira antes de compartilhar.
 
-## 8. Pause, resume, and change providers
+## 8. Pause, retome e altere provedores
 
-**Pause run** lets in-flight requests finish. **Start / resume** retries unfinished work and preserves completed results. Closing the browser does not stop the server. After a server restart, select the saved run and resume it.
+**Pausar análise** permite que as solicitações em andamento terminem. **Iniciar / retomar** tenta novamente os itens pendentes e preserva os resultados concluídos. Fechar o navegador não para o servidor. Após reiniciá-lo, selecione a análise salva e retome.
 
-To switch transcription provider: pause, stop the server, change `TRANSCRIPTION_PROVIDER` and the corresponding key in `.env`, restart, and resume. Existing transcripts are reused. Changing provider does not automatically replace transcripts you already paid for.
+Para trocar o provedor de transcrição: pause a análise, pare o servidor, altere `TRANSCRIPTION_PROVIDER` e a chave correspondente em `.env`, reinicie e retome. As transcrições existentes serão reutilizadas. A troca não substitui automaticamente transcrições pelas quais você já pagou.
 
-If an Apify launch response is lost, the app blocks a duplicate launch. Find the existing Actor run ID in Apify, attach it in **Run activity**, then resume. Do not launch another scrape merely because the first response was lost.
+Se a resposta de início da Apify for perdida, o aplicativo bloqueia uma nova execução duplicada. Encontre o ID da execução do Actor na Apify, anexe-o em **Atividade da análise** e retome. Não inicie outra coleta só porque a primeira resposta se perdeu.
 
-## Troubleshooting
+## Solução de problemas
 
-| Symptom | What to do |
+| Problema | O que fazer |
 | --- | --- |
-| `node` or `npm` not found | Install Node.js, then reopen the terminal. |
-| `--env-file-if-exists` unsupported | Upgrade to Node 22.9 or newer. |
-| FFmpeg or ffprobe missing | Install FFmpeg and ensure both commands are on PATH. |
-| Missing key after editing `.env` | Confirm it is named `.env`, not `.env.txt`, in the same folder as `server.mjs`. Restart. |
-| HTTP 401 or 403 | Check the selected provider key, account permissions and billing. |
-| HTTP 429 / paused run | Check provider quotas. Wait for reset or lower pacing; then resume. Short rate limits retry automatically. |
-| Groq upgrade unavailable | Configure Fireworks instead. Existing transcripts remain cached. |
-| No audio / too little speech | These Reels are excluded from spoken-script comparisons. They are not pending labels. |
-| Failed download or expired media | Inspect the original Reel. Resume can retry, but an expired source URL may require a fresh collection. |
-| Graph has fewer points than Reels | Missing/nonpositive plays or views, unknown likes, age filters, duplicates and exclusions can remove points. |
-| No Reels returned | Check the username, whether the account is public, Actor access, budget and the Apify run log. |
-| Port already in use | Stop the previous server, or set `PORT=5191` and open that port. |
-| Page stops responding after restart | Refresh the browser to obtain a new local request token. |
+| `node` ou `npm` não encontrado | Instale o Node.js e abra o terminal novamente. |
+| `--env-file-if-exists` não é compatível | Atualize para Node 22.9 ou mais recente. |
+| FFmpeg ou ffprobe ausente | Instale o FFmpeg e confira se os dois comandos estão no PATH. |
+| Chave ausente após editar `.env` | Confirme que o arquivo se chama `.env`, não `.env.txt`, e está na mesma pasta de `server.mjs`. Reinicie o servidor. |
+| HTTP 401 ou 403 | Confira a chave do provedor escolhido, as permissões da conta e a cobrança. |
+| HTTP 429 / análise pausada | Confira as cotas do provedor. Aguarde a renovação ou reduza o ritmo e retome. Limites breves são tentados novamente automaticamente. |
+| Acesso ao Groq indisponível | Configure Fireworks como provedor alternativo. As transcrições existentes continuam salvas. |
+| Sem áudio / fala muito curta | Esses Reels ficam fora das comparações de roteiros falados; não são classificações pendentes. |
+| Falha no download ou mídia expirada | Confira o Reel original. Retomar pode tentar novamente, mas um endereço de origem expirado pode exigir uma nova coleta. |
+| O gráfico tem menos pontos que Reels | Reproduções ou visualizações ausentes/não positivas, curtidas desconhecidas, filtros de idade, duplicatas e exclusões podem remover pontos. |
+| Nenhum Reel retornado | Confira o nome de usuário, se a conta é pública, o acesso ao Actor, o orçamento e o registro da execução da Apify. |
+| Porta já está em uso | Pare o servidor anterior ou defina `PORT=5191` e abra essa porta. |
+| A página para de responder após reiniciar | Atualize o navegador para obter um novo token de solicitação local. |
 
-## Costs, privacy and sharing
+## Custos, privacidade e compartilhamento
 
-The app's estimated costs are separate for collection, speech and Jev. Account minimums, retries and rate changes can affect the actual bill. Provider billing is authoritative. [Groq speech documentation](https://console.groq.com/docs/speech-to-text), [Apify Actor pricing](https://apify.com/apify/instagram-reel-scraper/pricing), and [TypeSafe documentation](https://docs.typesafe.ai/) are the starting points for current terms. The Fireworks implementation uses its Whisper Turbo audio endpoint; confirm availability in your account.
+As estimativas de custo são separadas para coleta, transcrição e Jev. Valores mínimos das contas, novas tentativas e alterações de tarifas afetam a cobrança real. A fatura de cada provedor é a fonte definitiva. [documentação de fala do Groq](https://console.groq.com/docs/speech-to-text), [preços do Actor da Apify](https://apify.com/apify/instagram-reel-scraper/pricing), e [documentação da TypeSafe](https://docs.typesafe.ai/) são pontos de partida para consultar os termos atuais. A implementação do Fireworks usa o endpoint de áudio Whisper Turbo; confirme a disponibilidade na sua conta.
 
-Do not publish `.env`, `data/`, screenshots of keys, or your exported archive by accident. These files are excluded from Git by default. [Read the data flow](PRIVACY.md). The server is intended for your own computer, not public hosting.
+Não publique por engano `.env`, `data/`, capturas de tela com chaves ou arquivos exportados. Esses arquivos são excluídos do Git por padrão. [Leia o fluxo de dados](PRIVACY.md). O servidor foi feito para uso no seu computador, não para hospedagem pública.
 
-## Record the demo
+## Grave a demonstração
 
-Open **Recording studio** from the dashboard, or visit **http://127.0.0.1:5190/record**. Choose your saved archive and a layout:
+Abra o **Estúdio de gravação** no painel ou acesse **http://127.0.0.1:5190/record**. Escolha o arquivo salvo e um layout:
 
-- **Scanner:** a paged thumbnail grid, large current-Reel analysis, counters and hook-frequency bars.
-- **Wall + map:** larger thumbnails fill the wall while corresponding points appear on the engagement map. The axis explicitly names plays or views, whichever the archive supports; they are never combined.
-- **Script breakdown:** a large Reel image and readable excerpts with Jev's script-role labels.
+- **Scanner:** um mural de miniaturas paginado, análise ampliada do Reel atual, contadores e barras de frequência dos ganchos.
+- **Wall + map:** miniaturas maiores ocupam o mural enquanto os pontos correspondentes aparecem no mapa de engajamento. O eixo identifica claramente reproduções ou visualizações, conforme os dados disponíveis; elas nunca são somadas.
+- **Script breakdown:** uma imagem grande do Reel e trechos legíveis com os papéis do roteiro identificados pelo Jev.
+- **Análise de carrosséis por perfil:** abra **Buscar carrosséis do perfil**, informe o @ de um perfil público e escolha até 12 publicações recentes. A Apify filtra automaticamente os posts em carrossel e busca as imagens dos slides; não é necessário fazer upload manual. O modelo visual padrão é `google/gemini-3.1-flash-lite`; a mesma chave OpenRouter também envia o relatório ao Jev para classificação final. Cada imagem tem limite de 1,5 MB e a seleção, 10 MB. Para trocar o modelo visual, configure `OPENROUTER_VISION_MODEL` no `.env` usando um modelo que aceite imagens pelo OpenRouter.
 
-Choose 12, 20 or 40 seconds, press Play, then **Clean view** to hide the controls. Press **C** to bring controls back, **Space** to pause, and **R** to restart. The timeline slider lets you inspect any frame. Loop adds a short hold at the end.
+Escolha 12, 20 ou 40 segundos, pressione Reproduzir e depois **Tela limpa** para ocultar os controles. Pressione **C** para exibi-los, **Espaço** para pausar e **R** para reiniciar. O controle da linha do tempo permite inspecionar qualquer quadro. A repetição mantém uma breve pausa no final.
 
-The canvas is 1080 × 1000 and scales to your window. Crop your screen recording around it and place it over your portrait footage. It is intentionally taller than the full research dashboard so the text stays larger on a phone. Script excerpts can be visually truncated; use the main dashboard to read the full transcript.
+O quadro tem 1080 × 1000 pixels e se ajusta à janela. Recorte a gravação de tela ao redor dele e coloque-a sobre seu vídeo vertical. Ele é mais alto que o painel de pesquisa para manter o texto legível no celular. Trechos de roteiro podem aparecer truncados; use o painel principal para ler a transcrição completa.
 
-The recording cost counter sums stored Jev estimates for the revealed scripts, including reused results; it is not a new charge or a complete pipeline invoice. Missing costs display as unknown. The synthetic rehearsal has no real cost. All these layouts replay saved results and make no new paid analysis calls.
+O contador de custos da gravação soma as estimativas salvas do Jev para os roteiros exibidos, incluindo resultados reutilizados; não representa uma nova cobrança nem a fatura completa do fluxo. Custos ausentes aparecem como desconhecidos. O ensaio sintético não tem custo real. Todos os layouts reproduzem resultados salvos e não fazem novas chamadas pagas de análise.
